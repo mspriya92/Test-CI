@@ -52,36 +52,36 @@ jobs:
     - name: List the report directory
       run: ls -R reports
 
-    #- name: Deploy to GitHub Pages
+    - name: Deploy to GitHub Pages
       #if: github.ref == 'refs/heads/main'  # Only deploy on main branch
-      #uses: peaceiris/actions-gh-pages@v3
-      #with:
-        #publish_dir: docs
-        #publish_branch: ci  # Deploy to the 'gh-pages' branch
-        #github_token: ${{ secrets.TOKEN }}  # Personal Access Token for authentication
-        #allow_empty_commit: true  # Don't allow empty commits
-        #keep_files: false  # Remove old files from the gh-pages branch
-        #force_orphan: true  # Don't create orphan branch
-        #enable_jekyll: false  # Disable Jekyll (if not using it)
-        #disable_nojekyll: false  # Ensure the '.nojekyll' file is included
-        #exclude_assets: .github 
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        publish_dir: docs
+        publish_branch: ci  # Deploy to the 'gh-pages' branch
+        github_token: ${{ secrets.TOKEN }}  # Personal Access Token for authentication
+        allow_empty_commit: true  # Don't allow empty commits
+        keep_files: false  # Remove old files from the gh-pages branch
+        force_orphan: true  # Don't create orphan branch
+        enable_jekyll: false  # Disable Jekyll (if not using it)
+        disable_nojekyll: false  # Ensure the '.nojekyll' file is included
+        exclude_assets: .github 
    
-    - name: Create docs folder and copy index.html
-      run: |
+    #- name: Create docs folder and copy index.html
+      #run: |
         # Ensure the docs folder exists in the same branch
-        mkdir -p docs
+        #mkdir -p docs
         # Copy the generated index.html file to the docs folder
-        cp -f "${{ github.workspace }}/reports/index.html" docs/index.html
+        #cp -f "${{ github.workspace }}/reports/index.html" docs/index.html
         # List the contents of the docs folder for verification
-        ls -R docs
+        #ls -R docs
 
-    - name: Commit and push docs to ci branch
-      run: |
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@users.noreply.github.com"
-        git add docs/
-        git commit -m "Deploy static site to GitHub Pages"
-        git push https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }} HEAD:ci
+    #- name: Commit and push docs to ci branch
+      #run: |
+        #git config --global user.name "github-actions"
+        #git config --global user.email "github-actions@users.noreply.github.com"
+        #git add docs/
+        #git commit -m "Deploy static site to GitHub Pages"
+        #git push https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }} HEAD:ci
       #env:
         #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         
