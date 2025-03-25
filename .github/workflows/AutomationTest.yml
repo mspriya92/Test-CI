@@ -48,6 +48,9 @@ jobs:
     - name: Run single test (if RUN_TESTS is not 'all')
       if: ${{ env.RUN_TESTS != 'all' }}
       run: mvn -Dtest=${{ env.TEST_CLASS }} test -B
+    
+    - name: List the report directory
+      run: ls -R reports
 
     - name: Deploy to GitHub Pages
       #if: github.ref == 'refs/heads/main'  # Only deploy on main branch
