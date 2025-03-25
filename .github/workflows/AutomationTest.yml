@@ -2,8 +2,8 @@ name: AutomationSchedule
 
 # Trigger the workflow to run on a daily schedule at midnight UTC.
 on:
-  workflow_dispatch:
-  #push:
+  #workflow_dispatch:
+  push:
 
 jobs:
   build_and_test:
