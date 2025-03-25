@@ -1,0 +1,102 @@
+name: AutomationOnSchedule
+
+# Trigger the workflow to run on a daily schedule at midnight UTC.
+on:
+  workflow_dispatch:
+  #schedule:
+    #- cron: '0 10 * * 5' #(which corresponds to 15:00 IST)
+    #- cron: '0 0 * * *'  # Runs daily at midnight UTC
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: Set environment variable to control test behavior
+      run: |
+        # Here, you can set the value of 'RUN_TESTS' to control whether to run all tests or a single test.
+        # You can set this directly in the workflow or use GitHub's API or commit history to decide.
+        # Default behavior is to run all tests.
+        echo "RUN_TESTS=all" >> $GITHUB_ENV  # Default to running all tests
+        
+        # You can also override the value of RUN_TESTS by passing it through the workflow environment
+        # For example, to test only a specific class, you can modify RUN_TESTS in the workflow.
+        # In this example, we manually set a test class name for demonstration purposes.
+        # Uncomment the next line if you want to run a single test (remove echo line above).
+        #echo "RUN_TESTS=single" >> $GITHUB_ENV
+        #echo "TEST_CLASS=GreeterTest" >> $GITHUB_ENV
+
+    - name: Run all tests (default behavior if RUN_TESTS=all)
+      if: ${{ env.RUN_TESTS == 'all' }}
+      run: mvn clean test -B
+
+    - name: Run single test (if RUN_TESTS is not 'all')
+      if: ${{ env.RUN_TESTS != 'all' }}
+      run: mvn -Dtest=${{ env.TEST_CLASS }} test -B
+
+    #- name: Deploy to GitHub Pages
+      #if: github.ref == 'refs/heads/main'  # Only deploy on main branch
+      #uses: peaceiris/actions-gh-pages@v3
+      #with:
+        #publish_dir: reports
+        #publish_branch: gh-pages  # Deploy to the 'gh-pages' branch
+        #github_token: ${{ secrets.PAT_TOKEN }}  # Personal Access Token for authentication
+        #allow_empty_commit: false  # Don't allow empty commits
+        #keep_files: false  # Remove old files from the gh-pages branch
+        #force_orphan: false  # Don't create orphan branch
+        #enable_jekyll: false  # Disable Jekyll (if not using it)
+        #disable_nojekyll: false  # Ensure the '.nojekyll' file is included
+        #exclude_assets: .github 
+   
+    #- name: testing workspace location
+      #run: |
+        #echo "location=${{ github.workspace }}" 
+        
+    #- name: List files in reports directory
+      #run: ls -R "${{ github.workspace }}" # Verify the files are in the reports directory
+    - name: Create docs directory and copy index.html
+      run: |
+        # Create the docs folder if it doesn't exist
+        mkdir -p docs
+        # Copy the index.html from reports directory to docs
+        cp -f "${{ github.workspace }}/reports/index.html" docs/index.html
+        # List files to confirm the copy operation was successful
+        ls -R docs
+        
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.PAT_TOKEN }}  # Token for authentication
+        publish_dir: docs  # Folder containing your static files (index.html)
+        #publish_branch: 'master'
+        allow_empty_commit: false  # Avoid empty commits
+        keep_files: false  # Remove old files on the target branch
+        force_orphan: false  # Don't create an orphan branch
+        enable_jekyll: false  # Disable Jekyll if not using it
+        disable_nojekyll: true
+
+    - name: Notify GitHub Pages URL
+      run: |
+        REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
+        USERNAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
+        LIVE_URL="https://${USERNAME}.github.io/${REPO_NAME}/"
+        echo "Your site is live at $LIVE_URL"
+    #- name: Notify GitHub Pages URL
+      #run: echo "Your site is live at https://mspriya92.github.io/ProjectTest/"
