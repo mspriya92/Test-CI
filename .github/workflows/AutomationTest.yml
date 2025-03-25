@@ -55,7 +55,7 @@ jobs:
       with:
         publish_dir: reports
         publish_branch: gh-pages  # Deploy to the 'gh-pages' branch
-        github_token: ${{ secrets.PAT_TOKEN }}  # Personal Access Token for authentication
+        github_token: ${{ secrets.TOKEN }}  # Personal Access Token for authentication
         allow_empty_commit: false  # Don't allow empty commits
         keep_files: false  # Remove old files from the gh-pages branch
         force_orphan: false  # Don't create orphan branch
