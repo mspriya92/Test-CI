@@ -3,9 +3,6 @@ name: AutomationOnSchedule
 # Trigger the workflow to run on a daily schedule at midnight UTC.
 on:
   workflow_dispatch:
-  #schedule:
-    #- cron: '0 10 * * 5' #(which corresponds to 15:00 IST)
-    #- cron: '0 0 * * *'  # Runs daily at midnight UTC
 
 jobs:
   build_and_test:
@@ -51,19 +48,19 @@ jobs:
       if: ${{ env.RUN_TESTS != 'all' }}
       run: mvn -Dtest=${{ env.TEST_CLASS }} test -B
 
-    #- name: Deploy to GitHub Pages
-      #if: github.ref == 'refs/heads/main'  # Only deploy on main branch
-      #uses: peaceiris/actions-gh-pages@v3
-      #with:
-        #publish_dir: reports
-        #publish_branch: gh-pages  # Deploy to the 'gh-pages' branch
-        #github_token: ${{ secrets.PAT_TOKEN }}  # Personal Access Token for authentication
-        #allow_empty_commit: false  # Don't allow empty commits
-        #keep_files: false  # Remove old files from the gh-pages branch
-        #force_orphan: false  # Don't create orphan branch
-        #enable_jekyll: false  # Disable Jekyll (if not using it)
-        #disable_nojekyll: false  # Ensure the '.nojekyll' file is included
-        #exclude_assets: .github 
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main'  # Only deploy on main branch
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        publish_dir: reports
+        publish_branch: gh-pages  # Deploy to the 'gh-pages' branch
+        github_token: ${{ secrets.PAT_TOKEN }}  # Personal Access Token for authentication
+        allow_empty_commit: false  # Don't allow empty commits
+        keep_files: false  # Remove old files from the gh-pages branch
+        force_orphan: false  # Don't create orphan branch
+        enable_jekyll: false  # Disable Jekyll (if not using it)
+        disable_nojekyll: false  # Ensure the '.nojekyll' file is included
+        exclude_assets: .github 
    
     #- name: testing workspace location
       #run: |
@@ -71,26 +68,26 @@ jobs:
         
     #- name: List files in reports directory
       #run: ls -R "${{ github.workspace }}" # Verify the files are in the reports directory
-    - name: Create docs directory and copy index.html
-      run: |
+    #- name: Create docs directory and copy index.html
+      #run: |
         # Create the docs folder if it doesn't exist
-        mkdir -p docs
+        #mkdir -p docs
         # Copy the index.html from reports directory to docs
-        cp -f "${{ github.workspace }}/reports/index.html" docs/index.html
+        #cp -f "${{ github.workspace }}/reports/index.html" docs/index.html
         # List files to confirm the copy operation was successful
-        ls -R docs
+        #ls -R docs
         
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.PAT_TOKEN }}  # Token for authentication
-        publish_dir: docs  # Folder containing your static files (index.html)
+    #- name: Deploy to GitHub Pages
+      #uses: peaceiris/actions-gh-pages@v3
+      #with:
+        #github_token: ${{ secrets.PAT_TOKEN }}  # Token for authentication
+        #publish_dir: docs  # Folder containing your static files (index.html)
         #publish_branch: 'master'
-        allow_empty_commit: false  # Avoid empty commits
-        keep_files: false  # Remove old files on the target branch
-        force_orphan: false  # Don't create an orphan branch
-        enable_jekyll: false  # Disable Jekyll if not using it
-        disable_nojekyll: true
+        #allow_empty_commit: false  # Avoid empty commits
+        #keep_files: false  # Remove old files on the target branch
+        #force_orphan: false  # Don't create an orphan branch
+        #enable_jekyll: false  # Disable Jekyll if not using it
+        #disable_nojekyll: true
 
     - name: Notify GitHub Pages URL
       run: |
