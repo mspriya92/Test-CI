@@ -56,8 +56,8 @@ jobs:
       #if: github.ref == 'refs/heads/main'  # Only deploy on main branch
       uses: peaceiris/actions-gh-pages@v3
       with:
-        publish_dir: reports
-        publish_branch: gh-pages  # Deploy to the 'gh-pages' branch
+        publish_dir: docs
+        publish_branch: ci  # Deploy to the 'gh-pages' branch
         github_token: ${{ secrets.TOKEN }}  # Personal Access Token for authentication
         allow_empty_commit: true  # Don't allow empty commits
         keep_files: false  # Remove old files from the gh-pages branch
