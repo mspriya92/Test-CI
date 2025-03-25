@@ -1,4 +1,4 @@
-name: AutomationOnSchedule
+name: AutomationSchedule
 
 # Trigger the workflow to run on a daily schedule at midnight UTC.
 on:
