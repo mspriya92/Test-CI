@@ -59,9 +59,9 @@ jobs:
         publish_dir: reports
         publish_branch: gh-pages  # Deploy to the 'gh-pages' branch
         github_token: ${{ secrets.TOKEN }}  # Personal Access Token for authentication
-        allow_empty_commit: false  # Don't allow empty commits
+        allow_empty_commit: true  # Don't allow empty commits
         keep_files: false  # Remove old files from the gh-pages branch
-        force_orphan: false  # Don't create orphan branch
+        force_orphan: true  # Don't create orphan branch
         enable_jekyll: false  # Disable Jekyll (if not using it)
         disable_nojekyll: false  # Ensure the '.nojekyll' file is included
         exclude_assets: .github 
